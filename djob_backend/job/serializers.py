@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Job, Category
+from .models import Job, Category , Employee , Document
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -37,3 +37,21 @@ class JobDetailSerializer(serializers.ModelSerializer):
             'company_email',
             'created_at_formatted'
         )
+
+
+class EmployeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = (
+            'id',
+            'name',
+            'email',
+            'description',
+            'created_at_formatted'
+        )
+
+
+class DocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Document
+        fields = '__all__'

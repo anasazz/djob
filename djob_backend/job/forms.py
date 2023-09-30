@@ -1,7 +1,12 @@
 from django.forms import ModelForm
+from django import forms
 
-from .models import Job
+from .models import Job , Employee ,Document
 
+class UploadForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ('document',)
 
 class JobForm(ModelForm):
     class Meta:
@@ -15,4 +20,16 @@ class JobForm(ModelForm):
             'company_name',
             'company_location',
             'company_email',
+        )
+
+
+class EmployeeForm(ModelForm):
+    class Meta:
+        model = Employee
+        fields = (
+ 
+            'name', 
+            'description', 
+            'email', 
+            'phone',
         )

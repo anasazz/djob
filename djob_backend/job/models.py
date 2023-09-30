@@ -10,6 +10,7 @@ class Category(models.Model):
         ordering = ('title',)
 
 
+
 class Job(models.Model):
     category = models.ForeignKey(Category, related_name='jobs', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
@@ -27,3 +28,39 @@ class Job(models.Model):
     
     def created_at_formatted(self):
         return defaultfilters.date(self.created_at, 'M d, Y')
+
+
+class Employee(models.Model):
+    job = models.ForeignKey(Job, related_name='employees', on_delete=models.CASCADE)
+
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+
+    phone = models.CharField(max_length=255)
+    email = models.EmailField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, related_name='employees', on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ('-created_at',)
+    
+    def created_at_formatted(self):
+        return defaultfilters.date(self.created_at, 'M d, Y')
+
+
+class EmployeeFile(models.Model):
+    user = models.ForeignKey(User,blank=True, null=True ,  on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee,blank=True, null=True, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='employee_files/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.file.name
+
+
+class Document(models.Model):
+    created_by = models.ForeignKey(User,blank=True, null=True, related_name='documents', on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee,blank=True, null=True, on_delete=models.CASCADE)
+    uploaded_at = models.DateTimeField(auto_now_add=True, blank=True, null=True,)
+
+    document = models.FileField(upload_to='uploads/%Y/%m/%d')
