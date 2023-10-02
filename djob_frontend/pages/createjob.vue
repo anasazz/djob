@@ -78,7 +78,7 @@ async function submitForm() {
 
 <template>
     <div class="py-10 px-6">
-        <h1 class="mb-6 text-2xl">Create job</h1>
+        <h1 class="mb-6 text-2xl">Creer un nouveau Business</h1>
 
         <form v-on:submit.prevent="submitForm" class="space-y-4">
             <div>
@@ -144,3 +144,7 @@ async function submitForm() {
         </form>
     </div>
 </template>
+
+<style>
+
+</style>

@@ -25,6 +25,22 @@ const closeModal = () => {
   isModalOpen.value = false;
 };
 
+// Object to store select all states for each date group
+const selectAll = ref({});
+
+// Method to select all documents within a date group
+const selectAllDocuments = (date) => {
+  const group = groupedDocumentList.value[date];
+  if (group) {
+    group.forEach((file) => {
+      if (!file.is_email_delivered) {
+      
+        file.isSelected = !file.isSelected;
+      }
+    });
+  }
+};
+
 const changeEmployee = async (file) => {
   try {
     const response = await fetch(`http://127.0.0.1:8000/api/v1/jobs/change-employee/${file.id}/`, {
@@ -169,6 +185,10 @@ const fetchDocumentList = async () => {
   }
 };
 
+const selectedDocumentCount = computed(() => {
+  return documentList.value.filter((file) => file.isSelected).length;
+});
+
 // Fetch the employee list when the component is mounted
 onMounted(() => {
   fetchEmployeeList();
@@ -190,7 +210,7 @@ const groupedDocumentList = computed(() => {
 </script>
 
 <template>
-  <div class="py-10 px-6">
+  <div class="  ">
     <h1 class="mb-6 text-2xl">Distribution des bulletins de paie</h1>
 
     <!-- Add a button to trigger the modal -->
@@ -198,28 +218,37 @@ const groupedDocumentList = computed(() => {
       @click="openModal"
       class="bg-teal-600 hover:bg-teal-700 text-white py-2 px-4 rounded-lg"
     >
-      Importer des fiches de paie 
+      Importer des fiches de paie      
+
     </button>
 
 
     <button
       @click="sendEmails()"
-      class="bg-blue-600 hover:bg-teal-700 text-white py-2 px-4 rounded-lg"
+      class="bg-slate-600 border border-dashed border-spacing-4 mx-4 hover:bg-blue-700 text-white py-2 px-4 rounded-lg"
     >
-      send emails
+        Send emails ({{ selectedDocumentCount }} selected)
     </button>
+
+    <!-- selectAll; {{JSON.stringify(selectAll)}} -->
+
 
     <div v-for="(group, date) in groupedDocumentList" :key="date">
       <h3 class="my-4 bg-slate-500 w-fit px-4 text-white font-bold py-1 rounded-full">{{ date }}</h3> <!-- Display the name of the day -->
+      <input type="checkbox" v-model="selectAll[date]" @change="selectAllDocuments(date)" /> <span class="mx-3 text-center">selectionnez tout</span> 
+
       <ul>
+
         <li
           class="bg-slate-50 flex items-center text-center justify-between rounded-lg my-2 px-3 py-2"
           v-for="file in group"
           :key="file.id"
         >
+        <input type="checkbox" v-model="file.isSelected" :disabled="file.is_email_delivered" />
+
           <p class="text-left font-semibold truncate w-1/4">{{ file.document.substring(file.document.lastIndexOf("/") + 1) }}</p>
           <!-- <p class="text-center font-semibold">  id: {{ file.id }}</p> -->
-          <p class="text-center font-semibold">createdby  id: {{ file.created_by }}</p>
+          <!-- <p class="text-center font-semibold">createdby  id: {{ file.created_by }}</p> -->
      
       
       <p
@@ -228,7 +257,7 @@ const groupedDocumentList = computed(() => {
       >email</p>
          
           <p class="text-center font-semibold">{{ file.uploaded_at }}</p>
-          <select class="bg-slate-200 rounded-lg px-3 py-3" v-model="file.employee" @change="changeEmployee(file)">
+          <select :disabled="file.is_email_delivered" class="bg-slate-200 rounded-lg px-3 py-3" v-model="file.employee" @change="changeEmployee(file)">
             <option
               :value="employee.id"
               v-for="employee in userList"
@@ -245,9 +274,9 @@ const groupedDocumentList = computed(() => {
  
     <div
       v-if="isModalOpen"
-      class="fixed inset-0 flex items-center justify-center z-50"
+      class="fixed inset-0 flex items-center  justify-center z-50"
     >
-      <div class="bg-white w-fit h-fit p-6 rounded-lg shadow-xl">
+      <div class="bg-white w-4/6 h-fit p-6 rounded-lg shadow-xl">
         <h2 class="text-lg font-semibold mb-4">Importer des fiches de paie</h2>
         <!-- {{JSON.stringify(documents)}} -->
 
@@ -275,7 +304,7 @@ const groupedDocumentList = computed(() => {
           @click="closeModal"
           class="bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg mt-4"
         >
-          Annuler
+          Fermer
         </button>
       </div>
     </div>

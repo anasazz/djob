@@ -45,16 +45,22 @@ function deleteJob(id) {
 
 <template>
     <div class="py-10 px-6">
-        <h1 class="mb-6 text-2xl">My Employees </h1>
+        <h1 class="mb-6 text-2xl">Vos Employees </h1>
 
-        <NuxtLink to="/addEmployee" class="my-5  py-2 px-6 bg-black text-white shadow-md  hover:bg-teal-700 rounded-xl mb-2">add employees</NuxtLink>
+        <NuxtLink to="/addEmployee" class="my-5  py-2 px-6 bg-black text-white shadow-md  hover:bg-teal-700 rounded-xl mb-2">Ajouter les employees</NuxtLink>
 
 
         <div class="space-y-4 mt-5">
-            <div v-for="job in jobs" :key="job.id"
-                :job="job"  class=" c">
+            <div v-for="item in jobs" :key="item.id"
+                :item="item"  class=" c">
 
-                <p>{{job.name}} -  {{job.email}} -  {{job.description}}  </p>
+                <div class="bg-slate-50  px-5 py-2 rounded-md">
+                    <p class="">{{item.name}} </p>
+                    <p class="">{{item.phone}} </p>
+                    <p class="">{{item.email}} </p>
+                    <p class="">{{item.description}} </p>
+                    
+                 </div>
 
             </div>
             

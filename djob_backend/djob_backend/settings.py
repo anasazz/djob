@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'djoser',
     'corsheaders',
     'job',
+    'djstripe'
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -145,3 +146,12 @@ EMAIL_HOST_USER = 'anasazzouz8@gmail.com'
 EMAIL_HOST_PASSWORD = 'ZTrAafNWQkUbmE49'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+
+
+
+
+STRIPE_TEST_PUBLIC_KEY = "pk_test_51IjVa0Go9IdW3YB3rQ0gZFBrfakVLUTsbxbF6LDtumfrmXsWd5YWHpDfglq1ypyPn3WnciTr1EIhWswUvMhJrGG400gJifmGuR" 
+STRIPE_TEST_SECRET_KEY = "sk_test_51IjVa0Go9IdW3YB3DUwA3L3YoPCcjjWxOb99BjcyKn1e0mM10p1B7iDrZv799sW72bbHLF72exxKP2zpk1g6NeSU0035VNyuBt"
+DJSTRIPE_WEBHOOK_SECRET = "whsec_xxx"  # Get it from the section in the Stripe dashboard where you added the webhook endpoint
+DJSTRIPE_USE_NATIVE_JSONFIELD = True  # We recommend setting to True for new installations
+DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"

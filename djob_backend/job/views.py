@@ -26,6 +26,8 @@ from django.core.mail import send_mail
 from django.core.mail import EmailMessage
 from django.conf import settings
 
+
+
 class SendEmailsView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
@@ -86,6 +88,7 @@ class ChangeEmployeeView(APIView):
     def put(self, request, file_id):
         print("========", file_id,  request.data )
         try:
+            
             # Get the newEmployeeId from the request data
             new_employee_id = request.data.get('newEmployeeId')
 
@@ -93,6 +96,10 @@ class ChangeEmployeeView(APIView):
             # For example, you can retrieve the file object, update the employee field,
             # and save it.
             file = Document.objects.get(id=file_id)
+            if file.is_email_delivered:
+                return Response({'error': 'the email already sent to employee, can not change the employee'}, status=status.HTTP_400_BAD_REQUEST)
+
+
             file.employee = Employee.objects.get(id=new_employee_id)
             file.save()
 
@@ -107,7 +114,7 @@ class DocumentView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):
-        docs = Document.objects.filter(created_by=request.user)
+        docs = Document.objects.filter(created_by=request.user).order_by('-uploaded_at')
         serializer = DocumentSerializer(docs, many=True)
 
         return Response(serializer.data)

@@ -19,7 +19,9 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.4.7",
+    "@vue-stripe/vue-stripe": "^4.5.0",
     "@vueuse/core": "^10.4.1",
+    "nuxt-stripe-module": "^3.2.0",
     "pinia": "^2.0.33"
   }
 }
