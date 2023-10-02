@@ -11,6 +11,10 @@ urlpatterns = [
     path('my/', views.MyJobsView.as_view()),
     path('myemployees/', views.EmployeeView.as_view()),
     path('myDocuments/', views.DocumentView.as_view()),
+    path('change-employee/<int:file_id>/', views.ChangeEmployeeView.as_view(), name='change-employee'),
+
+    path('SendEmailsView/', views.SendEmailsView.as_view()),
+
 
     
     path('create/', views.CreateJobView.as_view()),

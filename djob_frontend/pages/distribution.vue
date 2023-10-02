@@ -25,6 +25,57 @@ const closeModal = () => {
   isModalOpen.value = false;
 };
 
+const changeEmployee = async (file) => {
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/api/v1/jobs/change-employee/${file.id}/`, {
+      method: "PUT",
+      headers: {
+        Authorization: "token " + userStore.user.token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        newEmployeeId: file.employee,
+      }),
+    });
+
+    if (response.ok) {
+      // Successfully updated the selected employee on the backend
+      console.log("Employee changed successfully");
+    } else {
+      // Handle the error response here
+      console.error("Error changing employee");
+    }
+  } catch (error) {
+    console.error("Error changing employee:", error);
+  }
+};
+
+
+// Function to perform the file upload
+const sendEmails = async () => {
+  try {
+    
+    const response = await fetch("http://127.0.0.1:8000/api/v1/jobs/SendEmailsView/", {
+      method: "POST",
+      body: {},
+      headers: {
+        Authorization: "token " + userStore.user.token,
+      },
+    });
+
+    if (response.ok) {
+      return { status: "is sent" };
+    } else {
+      return { status: "failed" };
+    }
+  } catch (error) {
+    console.error("Error  sending:", error);
+    return { status: "failed" };
+  }
+};
+
+
+
 // Function to perform the file upload
 const performUpload = async (file) => {
   try {
@@ -123,6 +174,19 @@ onMounted(() => {
   fetchEmployeeList();
   fetchDocumentList()
 });
+
+const groupedDocumentList = computed(() => {
+  const groupedData = {};
+  documentList.value.forEach((file) => {
+    const date = new Date(file.uploaded_at).toLocaleDateString(); // Convert the date to a string format
+    if (!groupedData[date]) {
+      groupedData[date] = [];
+    }
+    groupedData[date].push(file);
+  });
+  return groupedData;
+});
+
 </script>
 
 <template>
@@ -137,29 +201,48 @@ onMounted(() => {
       Importer des fiches de paie 
     </button>
 
-    <ul>
-          <li
-            class="bg-slate-50 flex items-center text-center justify-between rounded-lg my-2 px-3 py-3"
-            v-for="file in documentList"
-            :key="file.id"
-          >
-            <p class="text-center font-semibold">name: {{ file.document.substring(file.document.lastIndexOf("/") + 1) }}</p>
-            <p class="text-center font-semibold">employee id: {{ file.created_by }}</p>
-            <p class="text-center font-semibold">uploaded_at : {{ file.uploaded_at }}</p>
-            <select class="bg-slate-200 rounded-lg px-3 py-3">
-              <option
-                :value="employee.id"
-                v-for="employee in userList"
-                :key="employee.id"
-              >
-                {{ employee.name }}
-              </option>
-            </select>  
-          </li>
-          
-        </ul>
 
-    <!-- Modal for uploading PDF files -->
+    <button
+      @click="sendEmails()"
+      class="bg-blue-600 hover:bg-teal-700 text-white py-2 px-4 rounded-lg"
+    >
+      send emails
+    </button>
+
+    <div v-for="(group, date) in groupedDocumentList" :key="date">
+      <h3 class="my-4 bg-slate-500 w-fit px-4 text-white font-bold py-1 rounded-full">{{ date }}</h3> <!-- Display the name of the day -->
+      <ul>
+        <li
+          class="bg-slate-50 flex items-center text-center justify-between rounded-lg my-2 px-3 py-2"
+          v-for="file in group"
+          :key="file.id"
+        >
+          <p class="text-left font-semibold truncate w-1/4">{{ file.document.substring(file.document.lastIndexOf("/") + 1) }}</p>
+          <!-- <p class="text-center font-semibold">  id: {{ file.id }}</p> -->
+          <p class="text-center font-semibold">createdby  id: {{ file.created_by }}</p>
+     
+      
+      <p
+      class="text-center font-semibold"
+        :class="{'fa-check text-green-500': file.is_email_delivered, 'fa-times text-red-500': !file.is_email_delivered}"
+      >email</p>
+         
+          <p class="text-center font-semibold">{{ file.uploaded_at }}</p>
+          <select class="bg-slate-200 rounded-lg px-3 py-3" v-model="file.employee" @change="changeEmployee(file)">
+            <option
+              :value="employee.id"
+              v-for="employee in userList"
+              :key="employee.id"
+            >
+              {{ employee.name }}
+            </option>
+          </select>  
+        </li>
+      </ul>
+    </div>
+
+    
+ 
     <div
       v-if="isModalOpen"
       class="fixed inset-0 flex items-center justify-center z-50"

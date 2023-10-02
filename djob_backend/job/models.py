@@ -64,3 +64,8 @@ class Document(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True, blank=True, null=True,)
 
     document = models.FileField(upload_to='uploads/%Y/%m/%d')
+    is_email_delivered = models.BooleanField(default=False)  # New field for tracking email delivery
+
+    def mark_as_email_delivered(self):
+            self.is_email_delivered = True
+            self.save()

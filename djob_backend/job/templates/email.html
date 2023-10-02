@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payroll Information</title>
+</head>
+<body>
+    <h1>Informations de paie</h1>
+
+    <p>Bonjour {{ employee_name }},</p>
+
+    <p>Voici les informations de votre paie pour ce mois-ci :</p>
+
+    {% comment %} <ul>
+        <li>Salaire de base : {{ base_salary }} €</li>
+        <li>Heures supplémentaires : {{ overtime_hours }} heures</li>
+        <li>Total : {{ total_salary }} €</li>
+    </ul> {% endcomment %}
+
+    <p>Ci-joint, vous trouverez votre bulletin de paie en pièce jointe au format PDF.</p>
+
+    <p>Merci et n'hésitez pas à nous contacter si vous avez des questions.</p>
+
+    <p>Cordialement,</p>
+    <p>Votre équipe de paie</p>
+
+    <hr>
+
+</body>
+</html>
