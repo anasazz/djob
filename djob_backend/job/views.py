@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .forms import JobForm ,EmployeeForm , UploadForm
-from .models import Job, Category, Employee, EmployeeFile  ,Document
+from .models import Job, Category, Employee  ,Document
 from .serializers import JobSerializer, JobDetailSerializer,DocumentSerializer,  CategorySerializer , EmployeeSerializer
 
 from django.http import JsonResponse
@@ -54,7 +54,7 @@ class SendEmailsView(APIView):
                 # Create an EmailMessage object
                 email_subject = 'Fiche de paie de ce mois est pres'
                 email_body = 'this is your pay roll today'
-                from_email = 'contact@lidiye.com'
+                from_email = 'fouss@daya.com'
                 to_email = [document.employee.email]
 
                 email = EmailMessage(
