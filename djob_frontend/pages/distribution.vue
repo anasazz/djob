@@ -2,6 +2,8 @@
 import { onMounted, ref, reactive } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
+import CustomSelect from '@/components/CustomSelect.vue';
+
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -41,30 +43,7 @@ const selectAllDocuments = (date) => {
   }
 };
 
-const changeEmployee = async (file) => {
-  try {
-    const response = await fetch(`http://127.0.0.1:8000/api/v1/jobs/change-employee/${file.id}/`, {
-      method: "PUT",
-      headers: {
-        Authorization: "token " + userStore.user.token,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        newEmployeeId: file.employee,
-      }),
-    });
 
-    if (response.ok) {
-      // Successfully updated the selected employee on the backend
-      console.log("Employee changed successfully");
-    } else {
-      // Handle the error response here
-      console.error("Error changing employee");
-    }
-  } catch (error) {
-    console.error("Error changing employee:", error);
-  }
-};
 
 
 // Function to perform the file upload
@@ -155,10 +134,10 @@ const fetchEmployeeList = async () => {
       userList.value = data;
     } else {
       // Handle the error response here
-      console.error("Error fetching employee list");
+      alert("Error fetching employee list");
     }
   } catch (error) {
-    console.error("Error fetching employee list:", error);
+    alert("Error fetching employee list:");
   }
 };
 
@@ -194,6 +173,7 @@ onMounted(() => {
   fetchEmployeeList();
   fetchDocumentList()
 });
+
 
 const groupedDocumentList = computed(() => {
   const groupedData = {};
@@ -254,10 +234,14 @@ const groupedDocumentList = computed(() => {
       <p
       class="text-center font-semibold"
         :class="{'fa-check text-green-500': file.is_email_delivered, 'fa-times text-red-500': !file.is_email_delivered}"
-      >email</p>
+      >Email</p>
+
+
          
           <p class="text-center font-semibold">{{ file.uploaded_at }}</p>
-          <select :disabled="file.is_email_delivered" class="bg-slate-200 rounded-lg px-3 py-3" v-model="file.employee" @change="changeEmployee(file)">
+          <CustomSelect  :file='file' v-model="file.employee" :options="userList" />
+
+          <!-- <select :disabled="file.is_email_delivered" class="bg-slate-200 rounded-lg px-3 py-3" v-model="file.employee" @change="changeEmployee(file)">
             <option
               :value="employee.id"
               v-for="employee in userList"
@@ -265,7 +249,7 @@ const groupedDocumentList = computed(() => {
             >
               {{ employee.name }}
             </option>
-          </select>  
+          </select>   -->
         </li>
       </ul>
     </div>

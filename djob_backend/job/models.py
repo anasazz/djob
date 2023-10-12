@@ -68,6 +68,9 @@ class Document(models.Model):
 
     document = models.FileField(upload_to='uploads/%Y/%m/%d')
     is_email_delivered = models.BooleanField(default=False)  # New field for tracking email delivery
+    
+    def created_at_formatted(self):
+        return defaultfilters.date(self.uploaded_at, 'M d, Y')
 
     def mark_as_email_delivered(self):
             self.is_email_delivered = True

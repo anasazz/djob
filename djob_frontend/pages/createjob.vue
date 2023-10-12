@@ -82,7 +82,7 @@ async function submitForm() {
 
         <form v-on:submit.prevent="submitForm" class="space-y-4">
             <div>
-                <label>Category</label>
+                <label>Categorie</label>
 
                 <select v-model="category" class="w-full mt-2 p-4 rounded-xl bg-gray-100">
                     <option value="">Select category</option>
@@ -97,38 +97,38 @@ async function submitForm() {
             </div>
 
             <div>
-                <label>Title</label>
-                <input v-model="title" type="text" class="w-full mt-2 p-4 rounded-xl bg-gray-100">
+                <label>Titre</label>
+                <input v-model="title" type="text" class="w-full mt-2 p-2 rounded-xl bg-gray-100">
             </div>
 
             <div>
                 <label>Description</label>
-                <textarea v-model="description" class="w-full mt-2 p-4 rounded-xl bg-gray-100"></textarea>
+                <textarea v-model="description" class="w-full mt-2 p-2 rounded-xl bg-gray-100"></textarea>
             </div>
 
-            <div>
+            <!-- <div>
                 <label>Salary</label>
                 <input type="text" v-model="position_salary" class="w-full mt-2 p-4 rounded-xl bg-gray-100">
-            </div>
+            </div> -->
 
             <div>
                 <label>Location</label>
-                <input type="text" v-model="position_location" class="w-full mt-2 p-4 rounded-xl bg-gray-100">
+                <input type="text" v-model="position_location" class="w-full mt-2 p-2 rounded-xl bg-gray-100">
             </div>
 
             <div>
-                <label>Company name</label>
+                <label>Companie name</label>
                 <input type="text" v-model="company_name" class="w-full mt-2 p-4 rounded-xl bg-gray-100">
             </div>
 
             <div>
-                <label>Company location</label>
+                <label>Companie location</label>
                 <input type="text" v-model="company_location" class="w-full mt-2 p-4 rounded-xl bg-gray-100">
             </div>
 
             <div>
-                <label>Company e-mail</label>
-                <input type="text" v-model="company_email" class="w-full mt-2 p-4 rounded-xl bg-gray-100">
+                <label class="text-green-400">Companie e-mail -- sera utilisé pour envoyée les fiches de paies</label>
+                <input type="text" v-model="company_email" class="w-full mt-2 p-4 rounded-xl bg-gray-100" placeholder="contable@company.com">
             </div>
 
             <div

@@ -17,7 +17,7 @@ export default defineNuxtConfig({
       
             Inter: [400, 700],
              'Josefin+Sans': true,
-            Lato: [100, 300],
+            Lato: [100, 300,600, 900],
             Raleway: {
               wght: [100, 400],
               ital: [100]

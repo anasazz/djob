@@ -1,13 +1,13 @@
 <template>
   <div>
     <nav class="p-4 px-5 flex items-center justify-between bg-white">
-      <NuxtLink to="/" class="text-xl text-black">Djob</NuxtLink>
+      <NuxtLink to="/" class="text-xl text-black font-extrabold">lidiye.com</NuxtLink>
 
       <div class="flex items-center space-x-4">
         <div class="flex md:mt-0 items-center space-x-4">
           <template v-if="userStore.user.isAuthenticated">
-            <NuxtLink to="/myjobs" class="py-2 px-6 bg-teal-500 hover:bg-teal-700 text-white rounded-xl">Mon Business</NuxtLink>
-            <NuxtLink to="/createjob" class="py-2 px-6 bg-teal-600 hover:bg-teal-700 text-white rounded-xl">Creer un Business</NuxtLink>
+            <NuxtLink to="/myjobs" class="py-2 font-semibold px-6 bg-slate-200 text-black hover:bg-slate-700 hover:text-white rounded-xl">Mon Business</NuxtLink>
+            <NuxtLink to="/createjob" class="py-2 font-bold px-6 bg-slate-200 text-black hover:bg-slate-700  hover:text-white rounded-xl">Creer un Business</NuxtLink>
             <a v-on:click="logout" class="py-2 px-6 bg-rose-600 hover:bg-rose-700 text-white rounded-xl">Log out</a>
           </template>
 
@@ -25,7 +25,7 @@
       <!-- Sidebar -->
       <div v-if="userStore.user.isAuthenticated" class="w-1/6 h-screen p-4">
         <div class="text-gray-700">
-          <h2 class="text-xl font-semibold mb-4">Sidebar</h2>
+          <h2 class="text-xl font-semibold mb-4">Menu</h2>
           <NuxtLink to="/distribution" class="block py-2 px-6 bg-white text-black shadow-md hover:bg-slate-700 hover:text-white rounded-xl mb-2">My distributions</NuxtLink>
           <NuxtLink to="/employee" class="block py-2 px-6 bg-white text-black shadow-md hover:bg-slate-700 hover:text-white rounded-xl mb-2">My employees</NuxtLink>
           <NuxtLink to="/profile" class="block py-2 px-6 bg-white text-black shadow-md hover:bg-slate-700 hover:text-white rounded-xl mb-2">Mon profile</NuxtLink>
