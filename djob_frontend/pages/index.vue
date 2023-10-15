@@ -5,7 +5,7 @@
 <template>
     <div>
         <div class="py-20 px-6 rounded-2xl bg-slate-100 text-center ">
-            <h1 class=" text-5xl text-black">Automate payroll sending</h1>
+            <h1 class=" text-5xl text-black">Bienvenue sur Lidiyé ! Envoyer vos fiches de paie n'a jamais été aussi simple. Inscrivez-vous et profitez de nos services</h1>
 
             <!-- <NuxtLink to="/browse" class="inline-block py-4 px-8 bg-teal-900 text-white rounded-xl">Browse</NuxtLink> -->
         </div>
