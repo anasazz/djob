@@ -31,7 +31,7 @@ async function submitForm() {
     if (category.value == '') { errors.value.push('You must select a category')}
     if (title.value == '') { errors.value.push('The title field is missing')}
     if (description.value == '') { errors.value.push('The description field is missing')}
-    if (position_salary.value == '') { errors.value.push('The position salary field is missing')}
+    // if (position_salary.value == '') { errors.value.push('The position salary field is missing')}
     if (position_location.value == '') { errors.value.push('The position location field is missing')}
     if (company_name.value == '') { errors.value.push('The company name field is missing')}
     if (company_location.value == '') { errors.value.push('The company location field is missing')}
@@ -48,7 +48,7 @@ async function submitForm() {
                 category: category.value,
                 title: title.value,
                 description: description.value,
-                position_salary: position_salary.value,
+                // position_salary: position_salary.value,
                 position_location: position_location.value,
                 company_name: company_name.value,
                 company_location: company_location.value,
