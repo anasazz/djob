@@ -31,7 +31,7 @@ const userStore = useUserStore();
     console.log("selected option ", selectedOption.value);
     console.log("selected file ", file.id);
   try {
-    const response = await fetch(`http://127.0.0.1:8000/api/v1/jobs/change-employee/${file.id}/`, {
+    const response = await fetch(`https://cloud.lidiye.com/api/v1/jobs/change-employee/${file.id}/`, {
       method: "PUT",
       headers: {
         Authorization: "token " + userStore.user.token,

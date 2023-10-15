@@ -11,7 +11,7 @@ async function submitForm() {
 
     errors.value = []
 
-    await $fetch('http://127.0.0.1:8000/api/v1/users/', {
+    await $fetch('https://cloud.lidiye.com/api/v1/users/', {
         method: 'POST',
         body: {
             username: email.value,

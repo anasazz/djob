@@ -27,7 +27,7 @@ async function submitForm() {
     if (email.value == '') { errors.value.push('The email field is missing') }
 
     if (errors.value.length == 0) {
-        await $fetch('http://127.0.0.1:8000/api/v1/jobs/createEmployee/', {
+        await $fetch('https://cloud.lidiye.com/api/v1/jobs/createEmployee/', {
             method: 'POST',
             headers: {
                 'Authorization': 'token ' + userStore.user.token,

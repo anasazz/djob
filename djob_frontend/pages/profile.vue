@@ -23,7 +23,7 @@ useSeoMeta({
 })
 
 async function getPlans() {
-    await $fetch('http://127.0.0.1:8000/api/v1/jobs/plans', {
+    await $fetch('https://cloud.lidiye.com/api/v1/jobs/plans', {
         headers: {
             'Authorization': 'token ' + userStore.user.token,
             'Content-Type': 'application/json'
