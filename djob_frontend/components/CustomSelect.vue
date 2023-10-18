@@ -13,6 +13,7 @@
           @change="changeEmployee(file)"
           class="bg-slate-200 w-full rounded-lg px-3 py-2"
           v-model="selectedOption"
+          :disabled="file.is_email_delivered"
         >
           <option value="" disabled>{{ filteredOptions.length }} Résultats</option>
           <option v-for="option in filteredOptions" :key="option.id" :value="option.id">
@@ -20,13 +21,14 @@
           </option>
         </select>
       </div>
-      <button @click="toggleSearchVisibility" class="absolute    p-1 rounded-full left-0 bg-white top-3">
+      <button v-if="!file.is_email_delivered" @click="toggleSearchVisibility" class="absolute p-1 rounded-full left-0 bg-white top-3">
         <!-- Add your icon here, e.g., a search icon -->
-         <nuxt-icon name="search" />
+        <nuxt-icon name="search" />
       </button>
     </div>
   </div>
 </template>
+
 
   
   

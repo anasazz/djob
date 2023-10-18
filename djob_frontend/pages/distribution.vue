@@ -59,6 +59,8 @@ const sendEmails = async () => {
     });
 
     if (response.ok) {
+      alert('Emails sent successfully')
+      fetchDocumentList()
       return { status: "is sent" };
     } else {
       return { status: "failed" };
@@ -86,6 +88,7 @@ const performUpload = async (file) => {
     });
 
     if (response.ok) {
+      fetchDocumentList()
       return { status: "is uploaded" };
     } else {
       return { status: "failed" };
@@ -241,15 +244,17 @@ const groupedDocumentList = computed(() => {
           <!-- <p class="text-center font-semibold">createdby  id: {{ file.created_by }}</p> -->
      
       
-      <p
-      class="text-center font-semibold"
-        :class="{'fa-check text-green-500': file.is_email_delivered, 'fa-times text-red-500': !file.is_email_delivered}"
-      >Email</p>
-  
+    
+      <p class="text-center font-semibold">
+  <span class="text-green-500" v-if="file.is_email_delivered">      {{$t('emailSent')}}</span>
+  <span class="text-red-500" v-else>      {{$t('emailFailed')}}  </span>
+</p>
+<!-- {{JSON.stringify(file)}} -->
+
 
 
          
-          <p class="text-center font-semibold">{{ file.uploaded_at }}</p>
+          <p class="text-center font-semibold">{{ file.uploaded_at_formatted }}</p>
           <CustomSelect  :file='file' v-model="file.employee" :options="userList" />
 
         

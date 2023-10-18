@@ -40,12 +40,14 @@ async function deleteEmployee(id) {
             <h3 class="mb-2 text-xl font-semibold"> {{ item.name }}</h3>
             <p class="text-gray-600">{{ item.phone }}</p>
             <p class="text-gray-600">{{ item.description }}</p>
+            <p class="mb-1"> {{ item.email }}</p>
         </div>
 
         <div>
             <!-- <p class="mb-2">{{ item.description }}</p> -->
     
-            <p class="mb-2"> {{ item.matricule }}</p>
+            <p class="mb-1"> {{ item.matricule }}</p>
+       
             <!-- <p>{{ job.position_salary }}</p> -->
         </div>
 
