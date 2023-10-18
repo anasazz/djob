@@ -190,37 +190,47 @@ const groupedDocumentList = computed(() => {
 </script>
 
 <template>
-  <div class="  ">
-    <h1 class="mb-6 text-2xl">Distribution des bulletins de paie</h1>
+<div class="py-10 px-6">
+      <h1 class="mb-6 text-2xl font-semibold text-slate-700"> {{$t('distributions')}}</h1>
 
     <!-- Add a button to trigger the modal -->
     <button
       @click="openModal"
-      class="bg-teal-600 hover:bg-teal-700 text-white py-2 px-4 rounded-lg"
+      class="bg-black hover:bg-teal-700 text-white py-2 px-4 rounded-full"
     >
-      Importer des fiches de paie      
-
+      {{$t('importFiles')}}
     </button>
+    
 
 
     <button
       @click="sendEmails()"
-      class="bg-slate-600 border border-dashed border-spacing-4 mx-4 hover:bg-blue-700 text-white py-2 px-4 rounded-lg"
-    >
-        Send emails ({{ selectedDocumentCount }} selected)
+      class="bg-white border border-dashed border-spacing-4 mx-4 hover:bg-slate-300 text-black py-2 px-4 rounded-lg"
+    >{{$t('sendEmails')}}
+     ({{ selectedDocumentCount }} selected)
     </button>
 
     <!-- selectAll; {{JSON.stringify(selectAll)}} -->
 
+    <!-- Styled "No data" message when there is no data -->
+    <div v-if="Object.keys(groupedDocumentList).length === 0" class="text-gray-700 my-5 bg-gray-100  border-1 border-gray-400 rounded-lg p-4 text-center">
+      <p>No data available.</p>
+      <p class="text-sm  text-gray-400">Start uploading your pdfs</p>
+    </div>
+
 
     <div v-for="(group, date) in groupedDocumentList" :key="date">
       <h3 class="my-4 bg-slate-500 w-fit px-4 text-white font-bold py-1 rounded-full">{{ date }}</h3> <!-- Display the name of the day -->
-      <input type="checkbox" v-model="selectAll[date]" @change="selectAllDocuments(date)" /> <span class="mx-3 text-center">selectionnez tout</span> 
+      <input type="checkbox" v-model="selectAll[date]" @change="selectAllDocuments(date)" /> <span class="mx-3 text-center">
+        
+        {{$t('selectAll')}}
+
+      </span> 
 
       <ul>
 
         <li
-          class="bg-slate-50 flex items-center text-center justify-between rounded-lg my-2 px-3 py-2"
+          class=" border flex items-center text-center justify-between rounded-lg my-2 px-3 "
           v-for="file in group"
           :key="file.id"
         >
@@ -235,23 +245,17 @@ const groupedDocumentList = computed(() => {
       class="text-center font-semibold"
         :class="{'fa-check text-green-500': file.is_email_delivered, 'fa-times text-red-500': !file.is_email_delivered}"
       >Email</p>
+  
 
 
          
           <p class="text-center font-semibold">{{ file.uploaded_at }}</p>
           <CustomSelect  :file='file' v-model="file.employee" :options="userList" />
 
-          <!-- <select :disabled="file.is_email_delivered" class="bg-slate-200 rounded-lg px-3 py-3" v-model="file.employee" @change="changeEmployee(file)">
-            <option
-              :value="employee.id"
-              v-for="employee in userList"
-              :key="employee.id"
-            >
-              {{ employee.name }}
-            </option>
-          </select>   -->
+        
         </li>
       </ul>
+
     </div>
 
     

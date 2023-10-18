@@ -57,6 +57,18 @@ async function submitForm() {
         })
         .then(response => {
             console.log('response', response)
+            // Show an alert
+            window.alert('Business created successfully');
+
+            // Reset form values
+            category.value = '';
+            title.value = '';
+            description.value = '';
+            position_salary.value = '';
+            position_location.value = '';
+            company_name.value = '';
+            company_location.value = '';
+            company_email.value = '';
 
             router.push({path: '/myjobs'})
         })
@@ -78,7 +90,7 @@ async function submitForm() {
 
 <template>
     <div class="py-10 px-6">
-        <h1 class="mb-6 text-2xl">Creer un nouveau Business</h1>
+        <h1 class="mb-6 text-2xl">Créer un nouveau Business</h1>
 
         <form v-on:submit.prevent="submitForm" class="space-y-4">
             <div>

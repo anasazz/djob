@@ -40,8 +40,8 @@ async function submitForm() {
 
 <template>
     <div class="py-10 px-6">
-        <div class="max-w-sm mx-auto py-10 px-6 bg-gray-100 rounded-xl">
-            <h1 class="mb-6 text-2xl">Sign up</h1>
+        <div class="max-w-sm mx-auto py-10 px-6 bg-white border shadow-sm rounded-xl">
+            <h1 class="mb-6 text-2xl text-center">Sign up</h1>
 
             <form v-on:submit.prevent="submitForm">
                 <input v-model="email" type="email" placeholder="Your email address..." class="w-full mb-4 py-4 px-6 rounded-xl">
@@ -57,7 +57,10 @@ async function submitForm() {
                     </p>
                 </div>
 
-                <button class="py-4 px-6 bg-teal-700 text-white rounded-xl">Submit</button>
+                <div class="flex justify-center">
+                    <button class="py-2 px-6 mt-5 font-semibold bg-slate-700 text-white rounded-xl">Submit</button>
+                </div> 
+
             </form>
         </div>
     </div>

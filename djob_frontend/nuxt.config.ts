@@ -11,7 +11,7 @@ export default defineNuxtConfig({
 
     modules: [
       '@pinia/nuxt',
-      
+      'nuxt-icons',      
       ['@nuxtjs/google-fonts', {
           families: {
       
@@ -25,5 +25,6 @@ export default defineNuxtConfig({
           }
       }],
     ],
+
 
 })

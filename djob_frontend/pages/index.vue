@@ -1,25 +1,22 @@
 <script setup>
- const { data: jobs } = await useFetch('https://cloud.lidiye.com/api/v1/jobs/newest/')
 </script>
 
 <template>
     <div>
-        <div class="py-20 px-6 rounded-2xl bg-slate-100 text-center ">
-            <h1 class=" text-5xl text-black">Bienvenue sur Lidiyé ! Envoyer vos fiches de paie n'a jamais été aussi simple. Inscrivez-vous et profitez de nos services</h1>
 
-            <!-- <NuxtLink to="/browse" class="inline-block py-4 px-8 bg-teal-900 text-white rounded-xl">Browse</NuxtLink> -->
+       
+        <div class="py-20 border px-6 rounded-2xl bg-slate-50 text-center ">
+            <h1 class=" text-5xl text-black">
+                {{ $t('intro') }}
+            </h1>
+
         </div>
+        <form>
+
+    </form>
 
         <div class="py-10 px-6">
-            <!-- <h2 class="mb-8 text-2xl text-center">Newest jobs</h2> -->
-
-            <!-- <div class="space-y-4">
-                <Job 
-                    v-for="job in jobs" 
-                    v-bind:key="job.id"
-                    v-bind:job="job" 
-                />
-            </div> -->
+         
         </div>
     </div>
 </template>

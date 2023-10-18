@@ -42,8 +42,16 @@ async function submitForm() {
         })
         .then(response => {
             console.log('response', response)
+            // Show an alert
+            window.alert('Employee created successfully');
 
-            // router.push({ path: '/employees' }) // Redirect to the employees list page
+            // Reset form values
+            name.value = '';
+            description.value = '';
+            phone.value = '';
+            email.value = '';
+
+            router.push({ path: '/employee' }) // Redirect to the employees list page
         })
         .catch(error => {
             if (error.response) {

@@ -34,7 +34,7 @@ async function deleteJob(id) {
 </script>
 
 <template>
-    <div class="p-6 flex items-center justify-between bg-gray-100 rounded-xl">
+    <div class="px-3 py-2 flex items-center justify-between bg-gray-100 rounded-xl">
         <div>
             <h3 class="mb-2 text-xl font-semibold">{{ job.title }}</h3>
             <p class="text-gray-600">{{ job.company_name }}</p>
@@ -50,9 +50,9 @@ async function deleteJob(id) {
         </div>
 
         <div class="space-x-4">
-            <NuxtLink v-bind:to="'/browse/' + job.id" class="py-4 px-6 bg-teal-700 text-white rounded-xl">Details</NuxtLink>
-            <NuxtLink v-bind:to="'/editjob/' + job.id" class="py-4 px-6 bg-cyan-700 text-white rounded-xl" v-if="my">Edit</NuxtLink>
-            <a @click="deleteJob(job.id)" class="py-4 px-6 bg-rose-700 text-white rounded-xl" v-if="my">Delete</a>
+            <NuxtLink v-bind:to="'/browse/' + job.id" class="py-2 px-6  bg-slate-700 text-white rounded-xl">Details</NuxtLink>
+            <NuxtLink v-bind:to="'/editjob/' + job.id" class="py-2 px-6 bg-slate-400 text-white rounded-xl" v-if="my">{{$t('edit')}}</NuxtLink>
+            <a @click="deleteJob(job.id)" class="py-2 px-6 bg-rose-700 text-white rounded-xl" v-if="my">{{$t('delete')}}</a>
         </div>
     </div>
 </template>

@@ -1,21 +1,33 @@
 <template>
-    <div class="relative">
-      <div>
-        <input class="bg-white w-full rounded-lg px-3 py-2" v-model="search" placeholder="Search employee..." />
+  <div class="relative p-1">
+    <div>
+      <div class="px-10" v-if="searchVisible">
+        <input
+          class="bg-white w-full rounded-lg px-3 border py-1"
+          v-model="search"
+          placeholder="Search employee..."
+        />
       </div>
-      <div>
-        <select  @change="changeEmployee(file)" class="bg-slate-200 w-full rounded-lg px-3 py-2" v-model="selectedOption">
-          <option value="" disabled >{{ filteredOptions.length }} Résultats</option>
-          <option v-for="option in filteredOptions" :key="option.id" :value="option.id">{{ option.name }} </option>
+      <div class="px-10">
+        <select
+          @change="changeEmployee(file)"
+          class="bg-slate-200 w-full rounded-lg px-3 py-2"
+          v-model="selectedOption"
+        >
+          <option value="" disabled>{{ filteredOptions.length }} Résultats</option>
+          <option v-for="option in filteredOptions" :key="option.id" :value="option.id">
+            {{ option.name }}
+          </option>
         </select>
       </div>
-      <!-- <p>{{JSON.stringify(file)}}</p> -->
-      <!-- <p>selectedOption: {{selectedOption}} </p>
-      <p>backend: {{file.employee}} </p>
-      <p>file id: {{file.id}} </p> -->
+      <button @click="toggleSearchVisibility" class="absolute    p-1 rounded-full left-0 bg-white top-3">
+        <!-- Add your icon here, e.g., a search icon -->
+         <nuxt-icon name="search" />
+      </button>
     </div>
-    
-  </template>
+  </div>
+</template>
+
   
   
   <script setup>
@@ -24,7 +36,7 @@ import { ref, computed, watch, defineProps, defineEmits } from 'vue';
 import { useUserStore } from "@/stores/user";
 import CustomSelect from '@/components/CustomSelect.vue';
 
-
+const searchVisible = ref(false); 
 const userStore = useUserStore();
   
   const changeEmployee = async (file) => {
@@ -84,5 +96,9 @@ const userStore = useUserStore();
     console.log("watched ", newVal);
     emit('update:selectedEmployee', newVal);
   });
+
+  const toggleSearchVisibility = () => {
+  searchVisible.value = !searchVisible.value;
+};
   </script>
   

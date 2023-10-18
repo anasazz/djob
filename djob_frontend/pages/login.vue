@@ -7,6 +7,12 @@ const userStore = useUserStore()
 let email = ref('')
 let password = ref('')
 let errors = ref([])
+let showPassword = ref(false)
+
+function togglePasswordVisibility() {
+    showPassword.value = !showPassword.value
+}
+
 
 async function submitForm() {
     console.log('submitForm')
@@ -44,13 +50,17 @@ async function submitForm() {
 
 <template>
     <div class="py-10 px-6">
-        <div class="max-w-sm mx-auto py-10 px-6 bg-gray-100 rounded-xl">
-            <h1 class="mb-6 text-2xl">Log in</h1>
+        <div class="max-w-sm mx-auto py-10 px-6 shadow-sm border bg-white rounded-xl">
+            <h1 class="mb-6 text-2xl text-center">{{ $t('signin') }}</h1>
 
             <form v-on:submit.prevent="submitForm">
                 <input v-model="email" type="email" placeholder="Your email address..." class="w-full mb-4 py-4 px-6 rounded-xl">
-                <input v-model="password" type="password" placeholder="Your password..." class="w-full mb-4 py-4 px-6 rounded-xl">
-
+                <div class="relative">
+                    <input v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="Your password..." class="w-full mb-4 py-4 px-6 rounded-xl">
+                    <button type="button" @click="togglePasswordVisibility" class="absolute top-3 right-4 focus:outline-none">
+                        {{ showPassword ? 'Hide' : 'Show' }}
+                    </button>
+                </div>
                 <div
                     v-if="errors.length" 
                     class="mb-6 py-4 px-6 bg-rose-400 text-white rounded-xl"
@@ -60,7 +70,9 @@ async function submitForm() {
                     </p>
                 </div>
 
-                <button class="py-4 px-6 bg-teal-700 text-white rounded-xl">Submit</button>
+                <div class="flex justify-center">
+                    <button class="py-2 px-6 mt-5 font-semibold bg-slate-700 text-white rounded-xl">{{$t('comfirm') }}</button>
+                </div>            
             </form>
         </div>
     </div>

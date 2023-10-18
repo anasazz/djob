@@ -45,8 +45,18 @@ function deleteJob(id) {
 <template>
     <div class="py-10 px-6">
         <h1 class="mb-6 text-2xl">Mon Business</h1>
+        <NuxtLink to="/createjob" class="py-2 my-5 font-bold px-6 bg-slate-200 text-black hover:bg-slate-700  hover:text-white rounded-xl">
 
-        <div class="space-y-4">
+            {{$t('createBusiness')}}
+        </NuxtLink>
+
+
+        <div v-if="jobs && jobs.length === 0" class="text-gray-700 my-5 bg-gray-100  border-1 border-gray-400 rounded-lg p-4 text-center">
+      <p>No data available.</p>
+      <p class="text-sm  text-gray-400">Start adding your employees</p>
+    </div>
+
+        <div class="space-y-4 mt-4">
             <Job
                 v-for="job in jobs"
                 :key="job.id"
