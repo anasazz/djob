@@ -11,7 +11,7 @@ onMounted(() => {
     }
 })
 
-let {data: jobCategories} = await useFetch('http://127.0.0.1:8000/api/v1/jobs/categories/')
+let {data: jobCategories} = await useFetch('https://cloud.lidiye.com/api/v1/jobs/categories/')
 
 let category = ref('')
 let title = ref('')
@@ -38,7 +38,7 @@ async function submitForm() {
     if (company_email.value == '') { errors.value.push('The company email field is missing')}
 
     if (errors.value.length == 0) {
-        await $fetch('http://127.0.0.1:8000/api/v1/jobs/create/', {
+        await $fetch('https://cloud.lidiye.com/api/v1/jobs/create/', {
             method: 'POST',
             headers: {
                 'Authorization': 'token ' + userStore.user.token,

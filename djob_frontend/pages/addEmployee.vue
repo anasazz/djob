@@ -30,7 +30,7 @@ async function submitForm() {
     const sanitizedPhone = phone.value.replace('+', '');
 
     if (errors.value.length == 0) {
-        await $fetch('http://127.0.0.1:8000/api/v1/jobs/createEmployee/', {
+        await $fetch('https://cloud.lidiye.com/api/v1/jobs/createEmployee/', {
             method: 'POST',
             headers: {
                 'Authorization': 'token ' + userStore.user.token,

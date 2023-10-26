@@ -15,7 +15,7 @@ const props = defineProps({
 })
 
 async function deleteEmployee(id) {
-    await $fetch('http://127.0.0.1:8000/api/v1/jobs/employeeDetails/' + id + '/delete/', {
+    await $fetch('https://cloud.lidiye.com/api/v1/jobs/employeeDetails/' + id + '/delete/', {
         method: 'DELETE',
         headers: {
             'Authorization': 'token ' + userStore.user.token,
