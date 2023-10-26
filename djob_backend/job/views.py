@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from .forms import JobForm ,EmployeeForm , UploadForm
 from .models import Job, Category, Employee  ,Document
 from .serializers import JobSerializer, JobDetailSerializer,DocumentSerializer,  CategorySerializer , EmployeeSerializer
-
+import requests
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
@@ -25,7 +25,60 @@ from django.core.mail import send_mail
 
 from django.core.mail import EmailMessage
 from django.conf import settings
+from .send_whats import upload_pdf_as_media, send_pdf_as_whatsapp_message
 
+
+class SendWhatsAppView(APIView):
+    def post(self, request, format=None):
+        try:
+            # Retrieve a list of documents
+            selected_document_ids = request.data.get("document_ids", [])
+            print('selected_document_ids',selected_document_ids)
+            
+            # Retrieve a list of selected documents
+            documents = Document.objects.select_related('employee').filter(id__in=selected_document_ids)
+            print('documents',documents)
+
+            for document in documents:
+                # Compose your WhatsApp message data
+                if not document.employee or not document.employee.phone:
+                    continue
+
+                # Use the path to your PDF file
+                #'https://cloud.lidiye.com' +
+                doc = document.document
+                pdf_file_path = 'https://cloud.lidiye.com' +  document.document.path
+                print('pdf_file_path' , pdf_file_path)
+                # Upload the PDF as media and get the media_id
+                access_token = "EAAVa3LuWDaQBO0tePyQ3wb7lwCWjrC55tJ9zSqdhXgetI1wzJ0aV9Axo7i91pGyUmE7zwl17X5pbt7GsZC2w0rLJVQxmJK2tKq9ixASVBglEM04ykMdmptzT1jxrlsq8X66RtnXZC2zaWc3sB85fZAFBMeiruNMO7cnLVDLJ4IPLmdNxO2dohKkAgmCKqbWpJfSt3eD49iXA3B3VLdy4PD6SzNB"
+                phone_number_id = "109321572275515"  # Replace with recipient's phone number ID
+
+                media_id = upload_pdf_as_media(access_token, phone_number_id, pdf_file_path , doc)
+
+                if media_id:
+                    print('media id' ,media_id )
+
+                    # Send the WhatsApp message with the PDF media
+                    recipient_phone_number = document.employee.phone  # Replace with recipient's phone number
+                    success = send_pdf_as_whatsapp_message(access_token, recipient_phone_number, media_id)
+                    print('heeeeeer')
+                    if success:
+                        print('succcesss')
+
+                        # PDF sent successfully
+                        document.mark_as_whatsapp_delivered()
+                        return Response({'success': 'PDF sent successfully'})
+                    else:
+                        return Response({'error': 'no success'}, status=status.HTTP_400_BAD_REQUEST)
+
+                else:
+                    return Response({'error': 'no media id'}, status=status.HTTP_400_BAD_REQUEST)
+                    
+
+            return Response({'success': 'All PDFs sent successfully'})
+        except Exception as e:
+            print("exception", e)
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SendEmailsView(APIView):
@@ -34,12 +87,17 @@ class SendEmailsView(APIView):
 
     def post(self, request, format=None):
         try:
-            # Retrieve a list of documents and their associated employees
-            documents = Document.objects.select_related('employee').all()
-            
+            selected_document_ids = request.data.get("document_ids", [])
+            print('selected_document_ids',selected_document_ids)
+            # Retrieve a list of selected documents
+            documents = Document.objects.select_related('employee').filter(id__in=selected_document_ids)
+
+      
             for document in documents:
+                employee_name = document.employee.name if document.employee else 'Employee'
+
                 email_template = render_to_string('email.html', {
-                'employee_name': document.employee.name,  # Replace with the employee's name
+                'employee_name': employee_name,  # Replace with the employee's name
                 'base_salary': 3000,          # Replace with the employee's base salary
                 'overtime_hours': 10,         # Replace with the employee's overtime hours
                 'total_salary': 3500,         # Replace with the total salary amount
@@ -54,7 +112,7 @@ class SendEmailsView(APIView):
                 # Create an EmailMessage object
                 email_subject = 'Fiche de paie de ce mois est pres'
                 email_body = 'this is your pay roll today'
-                from_email = 'fouss@daya.com'
+                from_email = document.employee.job.company_email
                 to_email = [document.employee.email]
 
                 email = EmailMessage(
@@ -164,12 +222,34 @@ class CreateEmployeeView(APIView):
             return Response({'status': 'errors', 'errors': form.errors})
     
     def put(self, request, pk):
-        doc = Employee.objects.get(pk=pk, created_by=request.user)
-        form = EmployeeForm(request.data, instance=job)
-        form.save()
+        try:
+            doc = Employee.objects.get(pk=pk, created_by=request.user)
 
-        return Response({'status': 'updated'})
-    
+        except Employee.DoesNotExist:
+            return Response({'error': 'Employee not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Get the old phone number
+        old_phone = doc.phone
+
+        form = EmployeeForm(request.data, instance=doc)
+
+        if form.is_valid():
+            form.save()
+
+            # Check if the 'phone' field has changed
+            if old_phone != doc.phone:
+                # The 'phone' field has changed, send a WhatsApp message
+                print("Your profile has been updated. Your phone number has been updated.")
+                doc.send_whatsapp_message()
+            else:
+                print(" The 'phone' field has not changed, no need to send a WhatsA")
+
+                # The 'phone' field has not changed, no need to send a WhatsApp message
+
+            return Response({'status': 'updated'})
+        else:
+            return Response({'error': 'Data validation failed', 'errors': form.errors}, status=status.HTTP_400_BAD_REQUEST)
+
     def delete(self, request, pk):
         doc = Employee.objects.get(pk=pk, created_by=request.user)
         doc.delete()
@@ -258,5 +338,12 @@ class JobsDetailView(APIView):
     def get(self, request, pk, format=None):
         job = Job.objects.get(pk=pk)
         serializer = JobDetailSerializer(job)
+
+        return Response(serializer.data)
+
+class EmployeeDetailView(APIView):
+    def get(self, request, pk, format=None):
+        employee = Employee.objects.get(pk=pk)
+        serializer = EmployeeSerializer(employee)
 
         return Response(serializer.data)

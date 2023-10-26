@@ -46,13 +46,25 @@ class EmployeeSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'email',
+            'matricule',
+            'phone',
             'description',
-            'created_at_formatted'
         )
+        read_only_fields = ('created_at_formatted',)
+
 
 
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
-        fields = '__all__'
-        read_only_fields = ('created_at_formatted',)
+        fields = (
+            'id',
+            'created_by',
+            'employee',
+            'document',
+            'is_email_delivered',
+            'is_whatsapp_delivered',
+            'uploaded_at',
+            'uploaded_at_formatted'
+            
+        )

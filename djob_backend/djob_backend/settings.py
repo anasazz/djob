@@ -148,6 +148,8 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
 
+# settings.py
+
 
 
 STRIPE_TEST_PUBLIC_KEY = "pk_test_51IjVa0Go9IdW3YB3rQ0gZFBrfakVLUTsbxbF6LDtumfrmXsWd5YWHpDfglq1ypyPn3WnciTr1EIhWswUvMhJrGG400gJifmGuR" 

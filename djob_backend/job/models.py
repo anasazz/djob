@@ -5,8 +5,7 @@ import os
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 
-
-
+import requests
 
 
 class Category(models.Model):
@@ -21,7 +20,7 @@ class Job(models.Model):
     category = models.ForeignKey(Category, related_name='jobs', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    position_salary = models.CharField(max_length=255)
+    position_salary = models.CharField(max_length=25,blank=True, null=True)
     position_location = models.CharField(max_length=255)
     company_name = models.CharField(max_length=255)
     company_location = models.CharField(max_length=255)
@@ -54,11 +53,65 @@ class Employee(models.Model):
     def created_at_formatted(self):
         return defaultfilters.date(self.created_at, 'M d, Y')
 
+    def send_whatsapp_message(self):
+        if not self.phone:
+            return  # Ensure the employee has a phone number before sending a message
+
+        print('ddddddd')
+        message_data = {
+            "messaging_product": "whatsapp", 
+            "to": self.phone , 
+            "type": "template", 
+            "template": { 
+                "name": "welcome",
+                "language": { 
+                    "code": "fr" 
+                },
+
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {
+                                "type": "text",
+                                "text": self.job.company_name
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+
+        access_token = "EAAVa3LuWDaQBO4aiYbZCEN08qw06Lu7FyM1bdqprmzPiFB060BL1dz5GrmvKOxIne0Pq7FxtA6i5kpCZCdi9SwbATSW1RHWVlOK6YGZBZCb3SuGS9mMWINNRl2yCiMn2QuR2oZCj0NGu9CG7kk9fl0YtHdG43q9VlzH6Bmh0J2wSDdDZAYdZCuQtTUAxXz4dm3DoruksafsIbejfq4SCZBqBCpNZChOwZD"
+
+        response = requests.post(
+            f"https://graph.facebook.com/v17.0/109321572275515/messages",
+            headers={
+                "Authorization": f"Bearer {access_token}",
+                "Content-Type": "application/json"
+            },
+            json=message_data
+        )
+        print(response.status_code)  # Print the HTTP status code
+        print(response.text)
+
+        return response  # You can return the response if needed
+
+        # Other methods and fields...
+
+    def save(self, *args, **kwargs):
+        created = not self.pk  # Check if the instance is being created
+        super(Employee, self).save(*args, **kwargs)
+        print('heeeee')
+        
+        # Call send_whatsapp_message if the instance is being created or updated
+        if created :
+            print('object created')
+            self.send_whatsapp_message()
+
     def __str__(self):
         return self.name
-    
-
-
+        
 
 
 class Document(models.Model):
@@ -68,12 +121,16 @@ class Document(models.Model):
 
     document = models.FileField(upload_to='uploads/%Y/%m/%d')
     is_email_delivered = models.BooleanField(default=False)  # New field for tracking email delivery
+    is_whatsapp_delivered = models.BooleanField(default=False)  # New field for tracking email delivery
     
-    def created_at_formatted(self):
+    def uploaded_at_formatted(self):
         return defaultfilters.date(self.uploaded_at, 'M d, Y')
 
     def mark_as_email_delivered(self):
             self.is_email_delivered = True
+            self.save()
+    def mark_as_whatsapp_delivered(self):
+            self.is_whatsapp_delivered = True
             self.save()
 
     def save(self, *args, **kwargs):

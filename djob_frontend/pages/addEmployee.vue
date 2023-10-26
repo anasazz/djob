@@ -25,9 +25,12 @@ async function submitForm() {
 
     if (name.value == '') { errors.value.push('The name field is missing') }
     if (email.value == '') { errors.value.push('The email field is missing') }
+    if (phone.value == '') { errors.value.push('The phone field is missing') }
+
+    const sanitizedPhone = phone.value.replace('+', '');
 
     if (errors.value.length == 0) {
-        await $fetch('https://cloud.lidiye.com/api/v1/jobs/createEmployee/', {
+        await $fetch('http://127.0.0.1:8000/api/v1/jobs/createEmployee/', {
             method: 'POST',
             headers: {
                 'Authorization': 'token ' + userStore.user.token,
@@ -36,7 +39,7 @@ async function submitForm() {
             body: {
                 name: name.value,
                 description: description.value,
-                phone: phone.value,
+                phone: sanitizedPhone,
                 email: email.value
             }
         })
@@ -101,7 +104,7 @@ async function submitForm() {
 
             <div>
                 <label>Phone</label>
-                <input type="text" v-model="phone" class="w-full mt-2 p-4 rounded-xl bg-gray-100">
+                <input placeholder="+1234567890" type="text" v-model="phone" class="w-full mt-2 p-4 rounded-xl bg-gray-100">
             </div>
 
             <div>

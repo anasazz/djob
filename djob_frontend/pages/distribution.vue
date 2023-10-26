@@ -15,7 +15,8 @@ const userList = ref([]);
 const errors = ref([]);
 const documents = ref([]); // Track the uploaded documents
 const documentList = ref([]);
-
+const sendWhatsAppLoading = ref(false); // Add this
+const sendEmailsLoading = ref(false); // Add this
 
 // Function to open the modal
 const openModal = () => {
@@ -35,7 +36,7 @@ const selectAllDocuments = (date) => {
   const group = groupedDocumentList.value[date];
   if (group) {
     group.forEach((file) => {
-      if (!file.is_email_delivered) {
+      if (file) {
       
         file.isSelected = !file.isSelected;
       }
@@ -46,30 +47,94 @@ const selectAllDocuments = (date) => {
 
 
 
-// Function to perform the file upload
-const sendEmails = async () => {
+const sendWhatsApp = async () => {
+  sendWhatsAppLoading.value = true; // Set loading state
+
   try {
-    
-    const response = await fetch("https://cloud.lidiye.com/api/v1/jobs/SendEmailsView/", {
+    // Get the IDs of the selected documents
+    const selectedDocumentIds = documentList.value
+      .filter((file) => file.isSelected)
+      .map((file) => file.id);
+
+    // Check if at least one document is selected
+    if (selectedDocumentIds.length === 0) {
+      alert('No documents selected for WhatsApp.');
+      sendWhatsAppLoading.value = false; // Set loading state
+
+      return { status: 'failed' };
+    }
+
+    const response = await fetch("http://127.0.0.1:8000/api/v1/jobs/SendWhatsAppView/", {
       method: "POST",
-      body: {},
+      body: JSON.stringify({ document_ids: selectedDocumentIds }),
       headers: {
         Authorization: "token " + userStore.user.token,
+        "Content-Type": "application/json",
       },
     });
 
     if (response.ok) {
-      alert('Emails sent successfully')
-      fetchDocumentList()
+      alert('WhatsApp messages sent successfully');
+      fetchDocumentList();
+      sendWhatsAppLoading.value = false; // Reset loading state
+
+      return { status: "is sent" };
+    } else {
+      sendWhatsAppLoading.value = false; // Reset loading state
+
+      return { status: "failed" };
+    }
+  } catch (error) {
+    sendWhatsAppLoading.value = false; // Reset loading state
+
+    console.error("Error sending WhatsApp messages:", error);
+    return { status: "failed" };
+  }
+};
+
+const sendEmails = async () => {
+  sendEmailsLoading.value = true; // Set loading state
+
+  try {
+    // Get the IDs of the selected documents
+    const selectedDocumentIds = documentList.value
+      .filter((file) => file.isSelected)
+      .map((file) => file.id);
+
+    // Check if at least one document is selected
+    if (selectedDocumentIds.length === 0) {
+      alert('No documents selected for email.');
+      sendEmailsLoading.value = false; // Set loading state
+
+      return { status: 'failed' };
+    }
+
+    const response = await fetch("http://127.0.0.1:8000/api/v1/jobs/SendEmailsView/", {
+      method: "POST",
+      body: JSON.stringify({ document_ids: selectedDocumentIds }),
+      headers: {
+        Authorization: "token " + userStore.user.token,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+      alert('Emails sent successfully');
+      sendEmailsLoading.value = false; // Set loading state
+
+      fetchDocumentList();
       return { status: "is sent" };
     } else {
       return { status: "failed" };
     }
   } catch (error) {
-    console.error("Error  sending:", error);
+    sendEmailsLoading.value = false; // Set loading state
+
+    console.error("Error sending emails:", error);
     return { status: "failed" };
   }
 };
+
 
 
 
@@ -79,7 +144,7 @@ const performUpload = async (file) => {
     const formData = new FormData();
     formData.append("document", file);
 
-    const response = await fetch("https://cloud.lidiye.com/api/v1/jobs/upload-files/", {
+    const response = await fetch("http://127.0.0.1:8000/api/v1/jobs/upload-files/", {
       method: "POST",
       body: formData,
       headers: {
@@ -124,7 +189,7 @@ const handleFileUpload = (event) => {
 // Function to fetch the list of employees from the API
 const fetchEmployeeList = async () => {
   try {
-    const response = await fetch("https://cloud.lidiye.com/api/v1/jobs/myemployees/", {
+    const response = await fetch("http://127.0.0.1:8000/api/v1/jobs/myemployees/", {
       method: "GET",
       headers: {
         Authorization: "token " + userStore.user.token,
@@ -146,7 +211,7 @@ const fetchEmployeeList = async () => {
 
 const fetchDocumentList = async () => {
   try {
-    const response = await fetch("https://cloud.lidiye.com/api/v1/jobs/myDocuments/", {
+    const response = await fetch("http://127.0.0.1:8000/api/v1/jobs/myDocuments/", {
       method: "GET",
       headers: {
         Authorization: "token " + userStore.user.token,
@@ -177,6 +242,13 @@ onMounted(() => {
   fetchDocumentList()
 });
 
+const emailButtonDisabled = computed(() => {
+  // Check if all selected documents have is_email_delivered as true
+  const selectedDocuments = documentList.value.filter((file) => file.isSelected);
+  const allSelectedDelivered = selectedDocuments.every((file) => file.is_email_delivered);
+  
+  return allSelectedDelivered;
+});
 
 const groupedDocumentList = computed(() => {
   const groupedData = {};
@@ -207,11 +279,32 @@ const groupedDocumentList = computed(() => {
 
 
     <button
-      @click="sendEmails()"
-      class="bg-white border border-dashed border-spacing-4 mx-4 hover:bg-slate-300 text-black py-2 px-4 rounded-lg"
-    >{{$t('sendEmails')}}
-     ({{ selectedDocumentCount }} selected)
-    </button>
+  @click="sendEmails"
+  :class="{
+    'text-white bg-black': !sendEmailsLoading,
+    'bg-red-100 text-white cursor-not-allowed': sendEmailsLoading
+  }"
+  class="border font-semibold border-dashed border-spacing-4 mx-4 hover:bg-slate-300 text-black py-2 px-4 rounded-lg"
+  :disabled="sendEmailsLoading"
+>
+  {{$t('sendEmails')}}
+  <template v-if="!sendEmailsLoading">
+    ({{ selectedDocumentCount }} selected)
+  </template>
+</button>
+
+<button
+  @click="sendWhatsApp()"
+  :class="{
+    'text-white bg-black': !sendWhatsAppLoading,
+    'bg-red-100 text-white cursor-not-allowed': sendWhatsAppLoading
+  }"
+  class="bg-green-300 font-semibold border border-dashed border-spacing-4 mx-4 hover:bg-green-400 text-black py-2 px-4 rounded-lg"
+  :disabled="sendWhatsAppLoading"
+>
+  Send WhatsApp
+  ({{ selectedDocumentCount }} selected)
+</button>
 
     <!-- selectAll; {{JSON.stringify(selectAll)}} -->
 
@@ -237,7 +330,7 @@ const groupedDocumentList = computed(() => {
           v-for="file in group"
           :key="file.id"
         >
-        <input type="checkbox" v-model="file.isSelected" :disabled="file.is_email_delivered" />
+        <input type="checkbox" v-model="file.isSelected"  />
 
           <p class="text-left font-semibold truncate w-1/4">{{ file.document.substring(file.document.lastIndexOf("/") + 1) }}</p>
           <!-- <p class="text-center font-semibold">  id: {{ file.id }}</p> -->
@@ -249,6 +342,14 @@ const groupedDocumentList = computed(() => {
   <span class="text-green-500" v-if="file.is_email_delivered">      {{$t('emailSent')}}</span>
   <span class="text-red-500" v-else>      {{$t('emailFailed')}}  </span>
 </p>
+
+<p class="text-center font-semibold">
+  <span class="text-green-500" v-if="file.is_whatsapp_delivered">     WhatsApp</span>
+  <span class="text-red-500" v-else>  WhatsApp </span>
+</p>
+
+
+<!-- is_whatsapp_delivered -->
 <!-- {{JSON.stringify(file)}} -->
 
 

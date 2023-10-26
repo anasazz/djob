@@ -12,7 +12,7 @@ onMounted(() => {
     }
 })
 
-const {data: item} = await useFetch('https://cloud.lidiye.com/api/v1/jobs/employeeDetails/' + route.params.id + '/')
+const {data: item} = await useFetch('http://127.0.0.1:8000/api/v1/jobs/employeeDetails/' + route.params.id + '/')
 
 let name = ref(item.value.name)
 let description = ref(item.value.description)
@@ -29,9 +29,10 @@ async function submitForm() {
 
     if (name.value == '') { errors.value.push('The title field is missing')}
     if (description.value == '') { errors.value.push('The description field is missing')}
+    const sanitizedPhone = phone.value.replace('+', '');
 
     if (errors.value.length == 0) {
-        await $fetch('https://cloud.lidiye.com/api/v1/jobs/employeeUpdate/' + route.params.id + '/edit/', {
+        await $fetch('http://127.0.0.1:8000/api/v1/jobs/employeeUpdate/' + route.params.id + '/edit/', {
             method: 'PUT',
             headers: {
                 'Authorization': 'token ' + userStore.user.token,
@@ -41,7 +42,7 @@ async function submitForm() {
                 name: name.value,
                 description: description.value,
                 email: email.value,
-                phone: phone.value,
+                phone: sanitizedPhone,
                 matricule: matricule.value,
         
             }
@@ -73,7 +74,7 @@ async function submitForm() {
 <template>
     <div class="py-10 px-6">
         <h1 class="mb-6 text-2xl">Edit Employee</h1>
-        {{JSON.stringify(item)}}
+        <!-- {{JSON.stringify(item)}} -->
 
         <form v-on:submit.prevent="submitForm" class="space-y-4">
             <div>
