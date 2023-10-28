@@ -3,7 +3,9 @@ import os
 def upload_pdf_as_media(access_token, phone_number_id, pdf_file_path , doc):
     url = f'https://graph.facebook.com/v18.0/{phone_number_id}/media'
 
-    file_name = os.path.basename(pdf_file_path)
+    file_name = pdf_file_path
+    print('pdf_file_ppdf_file_pathath', pdf_file_path)
+    # os.path.basename(pdf_file_path)
 
 
     files = {

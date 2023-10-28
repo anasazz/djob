@@ -15,7 +15,10 @@
 
     </form>
 
-        <div class="py-10 px-6">
+        <div class="absolute bottom-0 right-3">
+            <!-- <p>by browsing this website you agree to terms of services</p> -->
+            <NuxtLink v-bind:to="'/politics/' " class="p-4 px-6 bg-slate-100 border  text-black rounded-xl font-bold">Privacy policy / terms of services</NuxtLink>
+
          
         </div>
     </div>
