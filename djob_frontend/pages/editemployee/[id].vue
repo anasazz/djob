@@ -12,7 +12,7 @@ onMounted(() => {
     }
 })
 
-const {data: item} = await useFetch('https://cloud.lidiye.com/api/v1/jobs/employeeDetails/' + route.params.id + '/')
+const {data: item} = await useFetch('http://127.0.0.1:8000/api/v1/jobs/employeeDetails/' + route.params.id + '/')
 
 let name = ref(item.value.name)
 let description = ref(item.value.description)
@@ -32,7 +32,7 @@ async function submitForm() {
     const sanitizedPhone = phone.value.replace('+', '');
 
     if (errors.value.length == 0) {
-        await $fetch('https://cloud.lidiye.com/api/v1/jobs/employeeUpdate/' + route.params.id + '/edit/', {
+        await $fetch('http://127.0.0.1:8000/api/v1/jobs/employeeUpdate/' + route.params.id + '/edit/', {
             method: 'PUT',
             headers: {
                 'Authorization': 'token ' + userStore.user.token,

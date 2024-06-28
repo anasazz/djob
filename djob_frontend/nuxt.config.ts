@@ -15,9 +15,7 @@ export default defineNuxtConfig({
       ['@nuxtjs/google-fonts', {
           families: {
       
-            Inter: [400, 700],
-             'Josefin+Sans': true,
-            Lato: [100, 300,600, 900],
+            Poppins: [100,200, 300,600, 900],
             Raleway: {
               wght: [100, 400],
               ital: [100]

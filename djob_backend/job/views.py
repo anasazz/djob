@@ -6,9 +6,9 @@ from .forms import JobForm ,EmployeeForm , UploadForm
 from .models import Job, Category, Employee  ,Document
 from .serializers import JobSerializer, JobDetailSerializer,DocumentSerializer,  CategorySerializer , EmployeeSerializer
 import requests
+from scrape.serializers import ScrapedDataSerializer
 from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
-
+from scrape.models import ScrapedData
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -26,6 +26,7 @@ from django.core.mail import send_mail
 from django.core.mail import EmailMessage
 from django.conf import settings
 from .send_whats import upload_pdf_as_media, send_pdf_as_whatsapp_message
+from rest_framework.pagination import PageNumberPagination
 
 
 class SendWhatsAppView(APIView):
@@ -45,9 +46,9 @@ class SendWhatsAppView(APIView):
                     continue
 
                 # Use the path to your PDF file
-                #'https://cloud.lidiye.com' +
+                #'http://127.0.0.1:8000' +
                 doc = document.document
-                pdf_file_path = 'https://cloud.lidiye.com' +  document.document.path
+                pdf_file_path = 'http://127.0.0.1:8000' +  document.document.path
                 print('pdf_file_path' , pdf_file_path)
                 # Upload the PDF as media and get the media_id
                 access_token = "EAAVa3LuWDaQBO0tePyQ3wb7lwCWjrC55tJ9zSqdhXgetI1wzJ0aV9Axo7i91pGyUmE7zwl17X5pbt7GsZC2w0rLJVQxmJK2tKq9ixASVBglEM04ykMdmptzT1jxrlsq8X66RtnXZC2zaWc3sB85fZAFBMeiruNMO7cnLVDLJ4IPLmdNxO2dohKkAgmCKqbWpJfSt3eD49iXA3B3VLdy4PD6SzNB"
@@ -317,27 +318,55 @@ class CreateJobView(APIView):
         return Response({'status': 'deleted'})
     
 
+class CustomPagination(PageNumberPagination):
+    page_size = 10  # Number of items per page
+    page_size_query_param = 'page_size'  # Change page size query parameter if needed
+    max_page_size = 100  # Maximum page size allowed
+
 class BrowseJobsView(APIView):
+    pagination_class = CustomPagination
+
     def get(self, request, format=None):
-        jobs = Job.objects.all()
+        jobs = ScrapedData.objects.order_by('reference')
+
         categories = request.GET.get('categories', '')
         query = request.GET.get('query', '')
 
         if query:
-            jobs = jobs.filter(title__icontains=query)
+            jobs = jobs.filter(objet__icontains=query)  # Adjust 'objet' to your actual field name
 
         if categories:
-            jobs = jobs.filter(category_id__in=categories.split(','))
+            categories_list = categories.split(',')
+            jobs = jobs.filter(categorie__id__in=categories_list)  # Adjust 'categorie' to your actual foreign key field
 
-        serializer = JobSerializer(jobs, many=True)
+        paginator = self.pagination_class()
+        result_page = paginator.paginate_queryset(jobs, request)
+        serializer = ScrapedDataSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
-        return Response(serializer.data)
 
 
-class JobsDetailView(APIView):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class ScrapedDataDetailView(APIView):
     def get(self, request, pk, format=None):
-        job = Job.objects.get(pk=pk)
-        serializer = JobDetailSerializer(job)
+        job = ScrapedData.objects.get(pk=pk)
+        serializer = ScrapedDataSerializer(job)
 
         return Response(serializer.data)
 

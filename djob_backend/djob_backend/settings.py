@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'djoser',
     'corsheaders',
     'job',
-    'djstripe'
+    'djstripe',
+    'scrape'
 ]
 
 CORS_ALLOWED_ORIGINS = [

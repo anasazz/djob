@@ -11,7 +11,7 @@ async function submitForm() {
 
     errors.value = []
 
-    await $fetch('https://cloud.lidiye.com/api/v1/users/', {
+    await $fetch('http://127.0.0.1:8000/api/v1/users/', {
         method: 'POST',
         body: {
             username: email.value,
@@ -44,9 +44,9 @@ async function submitForm() {
             <h1 class="mb-6 text-2xl text-center">Sign up</h1>
 
             <form v-on:submit.prevent="submitForm">
-                <input v-model="email" type="email" placeholder="Your email address..." class="w-full mb-4 py-4 px-6 rounded-xl">
-                <input v-model="password1" type="password" placeholder="Your password..." class="w-full mb-4 py-4 px-6 rounded-xl">
-                <input v-model="password2" type="password" placeholder="Repeat password..." class="w-full mb-4 py-4 px-6 rounded-xl">
+                <input v-model="email" type="email" placeholder="Your email address..." class="w-full mb-4 py-4 px-6 border rounded-xl">
+                <input v-model="password1" type="password" placeholder="Your password..." class="w-full mb-4 py-4 px-6 border rounded-xl">
+                <input v-model="password2" type="password" placeholder="Repeat password..." class="w-full mb-4 py-4 px-6 border rounded-xl">
 
                 <div
                     v-if="errors.length" 

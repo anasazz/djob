@@ -64,7 +64,7 @@ const sendWhatsApp = async () => {
       return { status: 'failed' };
     }
 
-    const response = await fetch("https://cloud.lidiye.com/api/v1/jobs/SendWhatsAppView/", {
+    const response = await fetch("http://127.0.0.1:8000/api/v1/jobs/SendWhatsAppView/", {
       method: "POST",
       body: JSON.stringify({ document_ids: selectedDocumentIds }),
       headers: {
@@ -109,7 +109,7 @@ const sendEmails = async () => {
       return { status: 'failed' };
     }
 
-    const response = await fetch("https://cloud.lidiye.com/api/v1/jobs/SendEmailsView/", {
+    const response = await fetch("http://127.0.0.1:8000/api/v1/jobs/SendEmailsView/", {
       method: "POST",
       body: JSON.stringify({ document_ids: selectedDocumentIds }),
       headers: {
@@ -144,7 +144,7 @@ const performUpload = async (file) => {
     const formData = new FormData();
     formData.append("document", file);
 
-    const response = await fetch("https://cloud.lidiye.com/api/v1/jobs/upload-files/", {
+    const response = await fetch("http://127.0.0.1:8000/api/v1/jobs/upload-files/", {
       method: "POST",
       body: formData,
       headers: {
@@ -189,7 +189,7 @@ const handleFileUpload = (event) => {
 // Function to fetch the list of employees from the API
 const fetchEmployeeList = async () => {
   try {
-    const response = await fetch("https://cloud.lidiye.com/api/v1/jobs/myemployees/", {
+    const response = await fetch("http://127.0.0.1:8000/api/v1/jobs/myemployees/", {
       method: "GET",
       headers: {
         Authorization: "token " + userStore.user.token,
@@ -211,7 +211,7 @@ const fetchEmployeeList = async () => {
 
 const fetchDocumentList = async () => {
   try {
-    const response = await fetch("https://cloud.lidiye.com/api/v1/jobs/myDocuments/", {
+    const response = await fetch("http://127.0.0.1:8000/api/v1/jobs/myDocuments/", {
       method: "GET",
       headers: {
         Authorization: "token " + userStore.user.token,

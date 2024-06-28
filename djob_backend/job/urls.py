@@ -24,7 +24,7 @@ urlpatterns = [
     path('employeeUpdate/<int:pk>/edit/', views.CreateEmployeeView.as_view()),
     path('createEmployee/', views.CreateEmployeeView.as_view()),
     path('newest/', views.NewestJobsView.as_view()),
-    path('<int:pk>/', views.JobsDetailView.as_view()),
+    path('<int:pk>/', views.ScrapedDataDetailView.as_view()),
     path('employeeDetails/<int:pk>/', views.EmployeeDetailView.as_view()),
 
     

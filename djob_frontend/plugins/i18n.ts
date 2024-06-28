@@ -27,7 +27,7 @@ export default defineNuxtPlugin(({ vueApp }) => {
         emailSent:'Email successfully delivered',
         emailFailed:"Email not sent yet or Email failed",
 
-        intro: "Welcome to Lidiyé! Sending your payslips has never been easier. Sign up and enjoy our services",
+        intro: "Welcome to masteroffre!  Sign up and enjoy our services",
       },
       fr: {
         hello: 'Bonjour {name}!',
@@ -50,7 +50,7 @@ export default defineNuxtPlugin(({ vueApp }) => {
         emailSent:'Email a été bien envoyé',
         emailFailed:"Email non encore envoyé ou  n'a pas été envoyé",
 
-        intro: "Bienvenue sur Lidiyé ! Envoyer vos fiches de paie n'a jamais été aussi simple. Inscrivez-vous et profitez de nos services",
+        intro: "Bienvenue sur masteroffre ! Inscrivez-vous et profitez de nos services",
       },
     },
   });

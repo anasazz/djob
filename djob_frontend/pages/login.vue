@@ -19,7 +19,7 @@ async function submitForm() {
 
     errors.value = []
 
-    await $fetch('https://cloud.lidiye.com/api/v1/token/login/', {
+    await $fetch('http://127.0.0.1:8000/api/v1/token/login/', {
         method: 'POST',
         body: {
             username: email.value,
@@ -54,10 +54,10 @@ async function submitForm() {
             <h1 class="mb-6 text-2xl text-center">{{ $t('signin') }}</h1>
 
             <form v-on:submit.prevent="submitForm">
-                <input v-model="email" type="email" placeholder="Your email address..." class="w-full mb-4 py-4 px-6 rounded-xl">
+                <input v-model="email" type="email" placeholder="Your email address..." class="w-full border mb-4 py-4 px-6 rounded-xl">
                 <div class="relative">
-                    <input v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="Your password..." class="w-full mb-4 py-4 px-6 rounded-xl">
-                    <button type="button" @click="togglePasswordVisibility" class="absolute top-3 right-4 focus:outline-none">
+                    <input v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="Your password..." class="w-full mb-4 border py-4 px-6 rounded-xl">
+                    <button type="button" @click="togglePasswordVisibility" class="absolute top-4 right-4 focus:outline-none">
                         {{ showPassword ? 'Hide' : 'Show' }}
                     </button>
                 </div>
