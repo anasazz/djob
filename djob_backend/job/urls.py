@@ -7,7 +7,7 @@ urlpatterns = [
     path('', views.BrowseJobsView.as_view()),
     path('upload-files/', views.upload, name='upload_file'),
 
-    path('categories/', views.CategoriesView.as_view()),
+    path('categories/', views.CategoryView.as_view()),
     path('my/', views.MyJobsView.as_view()),
     path('myemployees/', views.EmployeeView.as_view()),
     path('myDocuments/', views.DocumentView.as_view()),
@@ -16,8 +16,6 @@ urlpatterns = [
     path('SendEmailsView/', views.SendEmailsView.as_view()),
     path('SendWhatsAppView/', views.SendWhatsAppView.as_view()),
 
-
-    
     path('create/', views.CreateJobView.as_view()),
 
     path('employeeDetails/<int:pk>/delete/', views.CreateEmployeeView.as_view()),

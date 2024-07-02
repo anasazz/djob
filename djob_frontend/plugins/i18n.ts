@@ -8,8 +8,8 @@ export default defineNuxtPlugin(({ vueApp }) => {
     messages: {
       en: {
         hello: 'Hello {name}!',
-        login: 'Log In',
-        signin: 'Create an Account',
+        login: 'connexion',
+        signup: 'Create an Account',
         logout: 'Log Out',
         hide: 'Hide',
         see: 'See',
@@ -32,7 +32,7 @@ export default defineNuxtPlugin(({ vueApp }) => {
       fr: {
         hello: 'Bonjour {name}!',
         login: 'Connexion',
-        signin: 'Créer un Compte',
+        signup: 'Créer un Compte',
         logout: 'Déconnexion',
         hide: 'Masquer',
         see: 'Voir',

@@ -15,18 +15,20 @@ from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
 from django.template.loader import render_to_string
-
+from scrape.serializers import ScrapedDataDetailSerializer
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-
+from scrape.models import SectorCategory
 from django.core.mail import send_mail
 
 from django.core.mail import EmailMessage
 from django.conf import settings
 from .send_whats import upload_pdf_as_media, send_pdf_as_whatsapp_message
 from rest_framework.pagination import PageNumberPagination
+from scrape.one_scrape_and_save import one_scrape_and_save
+from .serializers import CategoryViewSerializer
 
 
 class SendWhatsAppView(APIView):
@@ -319,9 +321,9 @@ class CreateJobView(APIView):
     
 
 class CustomPagination(PageNumberPagination):
-    page_size = 10  # Number of items per page
-    page_size_query_param = 'page_size'  # Change page size query parameter if needed
-    max_page_size = 100  # Maximum page size allowed
+    page_size = 10  # Adjust as per your requirements
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 
 class BrowseJobsView(APIView):
     pagination_class = CustomPagination
@@ -329,34 +331,49 @@ class BrowseJobsView(APIView):
     def get(self, request, format=None):
         jobs = ScrapedData.objects.order_by('reference')
 
-        categories = request.GET.get('categories', '')
         query = request.GET.get('query', '')
+        dateLimite = request.GET.get('dateLimite', '')
 
         if query:
             jobs = jobs.filter(objet__icontains=query)  # Adjust 'objet' to your actual field name
 
+        categories = request.GET.get('categories', '')
         if categories:
             categories_list = categories.split(',')
-            jobs = jobs.filter(categorie__id__in=categories_list)  # Adjust 'categorie' to your actual foreign key field
+            # Filter by SectorCategory IDs using domaines_activite__id__in
+            jobs = jobs.filter(domaines_activite__id__in=categories_list)
+
+        if dateLimite:
+            try:
+                # Assuming dateLimite is in ISO format (YYYY-MM-DDTHH:MM:SSZ)
+                jobs = jobs.filter(date_limite__lte=dateLimite)  # Assuming you want jobs with date_limite less than or equal to dateLimite
+            except Exception as e:
+                print(f"Error parsing dateLimite: {e}")
 
         paginator = self.pagination_class()
         result_page = paginator.paginate_queryset(jobs, request)
         serializer = ScrapedDataSerializer(result_page, many=True)
-        return paginator.get_paginated_response(serializer.data)
 
+        # Calculate total jobs count
+        total_jobs_count = jobs.count()
+        # Calculate total pages
+        total_pages = paginator.page.paginator.num_pages
 
+        custom_response = {
+            'total_jobs_count': total_jobs_count,
+            'total_pages': total_pages,
+            'results': serializer.data,
+        }
 
+        print("===", custom_response)
 
+        return Response(custom_response, status=status.HTTP_200_OK)
 
-
-
-
-
-
-
-
-
-
+class CategoryView(APIView):
+    def get(self, request):
+        categories = SectorCategory.objects.filter(parent=None)
+        serializer = CategoryViewSerializer(categories, many=True)
+        return Response(serializer.data)
 
 
 
@@ -365,8 +382,17 @@ class BrowseJobsView(APIView):
 
 class ScrapedDataDetailView(APIView):
     def get(self, request, pk, format=None):
+        additional = request.query_params.get('additional', '').lower() == 'true'
+
         job = ScrapedData.objects.get(pk=pk)
-        serializer = ScrapedDataSerializer(job)
+        if additional:
+            print('not fetched yet ', job.org)
+            one_scrape_and_save(job.reference , job.org )
+            serializer = ScrapedDataDetailSerializer(job)
+            
+
+        else:
+            serializer = ScrapedDataDetailSerializer(job)
 
         return Response(serializer.data)
 

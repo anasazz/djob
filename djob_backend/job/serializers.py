@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import Job, Category , Employee , Document
-
+from scrape.models import SectorCategory
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -68,3 +68,17 @@ class DocumentSerializer(serializers.ModelSerializer):
             'uploaded_at_formatted'
             
         )
+
+
+class CategoryViewSerializer(serializers.ModelSerializer):
+    subcategories = serializers.SerializerMethodField()
+
+    class Meta:
+        model = SectorCategory
+        fields = ['id', 'name', 'parent', 'subcategories']
+
+    def get_subcategories(self, obj):
+        # Get all subcategories recursively
+        subcategories = SectorCategory.objects.filter(parent=obj)
+        serializer = CategoryViewSerializer(subcategories, many=True)
+        return serializer.data

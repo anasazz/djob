@@ -1398,6 +1398,13 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.4.30.tgz#72acfe8df65139dcf298e965fb2ab1cff419e400"
   integrity sha512-CLg+f8RQCHQnKvuHY9adMsMaQOcqclh6Z5V9TaoMgy0ut0tz848joZ7/CYFFyF/yZ5i2yaw7Fn498C+CNZVHIg==
 
+"@vuepic/vue-datepicker@^8.8.1":
+  version "8.8.1"
+  resolved "https://registry.yarnpkg.com/@vuepic/vue-datepicker/-/vue-datepicker-8.8.1.tgz#8c336cfb2d8f3f145c4dfdd3b99b5d437a7ce227"
+  integrity sha512-8ehfUz1m69Vuc16Pm4ukgb3Mg1VT14x4EsG1ag4O/qbSNRWztTo+pUV4JnFt0FGLl5gGb6NXlxIvR7EjLgD7Gg==
+  dependencies:
+    date-fns "^3.6.0"
+
 "@vueuse/core@^10.4.1":
   version "10.5.0"
   resolved "https://registry.npmjs.org/@vueuse/core/-/core-10.5.0.tgz"
@@ -2100,6 +2107,11 @@ data-uri-to-buffer@^4.0.0:
   version "4.0.1"
   resolved "https://registry.npmjs.org/data-uri-to-buffer/-/data-uri-to-buffer-4.0.1.tgz"
   integrity sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==
+
+date-fns@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-3.6.0.tgz#f20ca4fe94f8b754951b24240676e8618c0206bf"
+  integrity sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==
 
 debug@2.6.9:
   version "2.6.9"

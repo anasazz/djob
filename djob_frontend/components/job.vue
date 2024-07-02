@@ -2,44 +2,55 @@
     <div class="px-3 py-2 flex items-start justify-between bg-white border rounded-xl">
       <!-- Left section: Job details -->
       <div class="flex-grow mr-4  w-2/3">
-        <h3 class="text-sm truncate   font-semibold mb-1">{{ job.objet }}</h3>
+
+        <h3 class="text-sm truncate uppercase font-semibold  mb-1">Objet : {{ job.objet }}</h3>
 
         <!-- Title and Company Name -->
         <div>
-          <p class="text-gray-600">{{ job.acheteur_public }}</p>
+          <p class="text-gray-600"></p>
         </div>
   
         <!-- Description and other fields -->
         <div class="mt-2">
+         
+          <div class="mb-2">
+            <span class="font-semibold">Acheteur Public:</span>
+            <span class="ml-2 text-gray-700 text-sm">{{ job.acheteur_public }}</span>
+            <!-- <span class="ml-2 text-gray-700">{{ JSON.stringify(job) }}</span> -->
+          </div>
+          <div class="mb-2">
+            <span class="font-semibold">N° appel d'offre:</span>
+            <span class="ml-2 text-gray-700">{{ job.reference_hash }}</span>
+          </div>
           <div class="mb-2">
             <span class="font-semibold">Lieu d'exécution:</span>
             <span class="ml-2 text-gray-700">{{ job.lieu_execution }}</span>
           </div>
           <div class="mb-2">
             <span class="font-semibold">Date limite:</span>
-            <span class="ml-2 text-gray-700">{{ job.date_limite }}</span>
+            <span class="ml-2 text-green-500 font-light">{{ job.date_limite_humanized }} / {{ job.time_left }}</span>
           </div>
-          <div class="mb-2">
+          <!-- <div class="mb-2">
             <span class="font-semibold">Procédure:</span>
             <span class="ml-2 text-gray-700">{{ job.procedure }}</span>
-          </div>
+          </div> -->
           <!-- Add more fields as needed -->
           <div class="mb-2" v-if="job.estimation">
             <span class="font-semibold">Estimation:</span>
-            <span class="ml-2 text-gray-700">{{ job.estimation }}</span>
+            <span class="ml-2 text-gray-700">{{ job.estimation }} MAD</span>
           </div>
           <div class="mb-2" v-if="job.reserve_tpe_pme">
             <span class="font-semibold">Réservé à la TPE et PME:</span>
             <span class="ml-2 text-gray-700">{{ job.reserve_tpe_pme }}</span>
           </div>
-          <div class="mb-2" v-if="job.domaines_activite">
+          <!-- <div class="mb-2" v-if="job.domaines_activite">
             <span class="font-semibold">Domaines d'activité:</span>
             <span class="ml-2 text-gray-700">{{ job.domaines_activite }}</span>
-          </div>
-          <div class="mb-2" v-if="job.adresse_retrait_dossiers">
+          </div> -->
+          <!-- <div class="mb-2" v-if="job.adresse_retrait_dossiers">
             <span class="font-semibold">Adresse de retrait des dossiers:</span>
             <span class="ml-2 text-gray-700">{{ job.adresse_retrait_dossiers }}</span>
-          </div>
+          </div> -->
           <div class="mb-2" v-if="job.adresse_depot_offres">
             <span class="font-semibold">Adresse de dépôt des offres:</span>
             <span class="ml-2 text-gray-700">{{ job.adresse_depot_offres }}</span>
@@ -85,6 +96,9 @@
             <span class="ml-2 text-gray-700">{{ job.contact_administratif }}</span>
           </div>
         </div>
+        <p class="flex rounded-full items-center text-slate-500 font-semibold mt-4 cursor-pointer" @click="toggleCountry('Morocco')">
+        <img src="../assets/flags/flagma.png" alt="Morocco Flag" class="w-6 h-6 mr-2 rounded-full"> Maroc
+      </p>
       </div>
   
       <!-- Right section: Actions -->

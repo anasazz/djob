@@ -51,7 +51,7 @@ async function submitForm() {
 <template>
     <div class="py-10 px-6">
         <div class="max-w-sm mx-auto py-10 px-6 shadow-sm border bg-white rounded-xl">
-            <h1 class="mb-6 text-2xl text-center">{{ $t('signin') }}</h1>
+            <h1 class="mb-6 text-2xl text-center">{{ $t('login') }}</h1>
 
             <form v-on:submit.prevent="submitForm">
                 <input v-model="email" type="email" placeholder="Your email address..." class="w-full border mb-4 py-4 px-6 rounded-xl">

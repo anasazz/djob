@@ -24,6 +24,7 @@
   "dependencies": {
     "@pinia/nuxt": "^0.4.7",
     "@vue-stripe/vue-stripe": "^4.5.0",
+    "@vuepic/vue-datepicker": "^8.8.1",
     "@vueuse/core": "^10.4.1",
     "nuxt-icons": "^3.2.1",
     "nuxt-stripe-module": "^3.2.0",

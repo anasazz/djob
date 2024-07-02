@@ -36,8 +36,8 @@
         <div class="flex md:mt-0 items-center space-x-4">
           <form class="px-4 py-2 rounded-lg"> 
       <select class="bg-slate-50 border px-4 py-2 rounded-lg" id="locale-select" v-model="$i18n.locale"> 
-        <option value="en">en</option> 
-        <option value="fr">fr</option> 
+        <option value="en">En</option> 
+        <option value="fr">Fr</option> 
       </select> 
     </form> 
           <!-- Sidebar -->
@@ -53,7 +53,7 @@
             <!-- <NuxtLink to="/" class="text-black hover:text-slate-300">Home</NuxtLink> -->
             <!-- <NuxtLink to="/browse" class="text-black hover:text-slate-300">Browse</NuxtLink> -->
             <NuxtLink to="/login" class="py-2 px-6 font-semibold bg-slate-900 hover:bg-teal-700 text-white rounded-xl">{{ $t('login') }}</NuxtLink>
-            <NuxtLink to="/signup" class="py-2 px-6 font-semibold bg-white  hover:bg-slate-700 hover:text-white text-black border rounded-xl">{{ $t('signin') }}</NuxtLink>
+            <NuxtLink to="/signup" class="py-2 px-6 font-semibold bg-white  hover:bg-slate-700 hover:text-white text-black border rounded-xl">{{ $t('signup') }}</NuxtLink>
           </template>
         </div>
       </div>
